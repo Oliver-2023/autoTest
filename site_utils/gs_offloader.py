@@ -761,8 +761,14 @@ class GSOffloader(BaseGSOffloader):
                 limit_file_count(dir_entry)
 
             process = None
+            gs_path = '%s%s' % (self._gs_uri, dest_path)
+            if self._console_client:
+                gcs_uri = os.path.join(gs_path, os.path.basename(dir_entry))
+                if not self._console_client.send_test_job_offloaded_message(
+                        gcs_uri + '/starting'):
+                    raise error_obj
+                    
             with timeout_util.Timeout(OFFLOAD_TIMEOUT_SECS):
-                gs_path = '%s%s' % (self._gs_uri, dest_path)
                 cmd = _get_cmd_list(self._multiprocessing, dir_entry, gs_path)
                 logging.debug('Attempting an offload command %s', cmd)
                 process = subprocess.Popen(
@@ -895,7 +901,7 @@ class OptionalMemoryCache(object):
    def delete(self, key):
        """If we have a cache try to remove a key."""
        if self.cache is not None:
-           return self.cache.delete(key)
+           return self.cache.popitem(key)
 
 
 job_timestamp_cache = OptionalMemoryCache()
@@ -1043,7 +1049,7 @@ class Offloader(object):
             logging.info(
                     'Offloader multiprocessing is set to:%r', multiprocessing)
             console_client = None
-            if (cloud_console_client and
+            if (cloud_console_client and not options.process_hosts_only and
                     cloud_console_client.is_cloud_notification_enabled()):
                 console_client = cloud_console_client.PubSubBasedClient()
             self._gs_offloader = GSOffloader(
