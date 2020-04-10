@@ -762,6 +762,10 @@ class GSOffloader(BaseGSOffloader):
 
             process = None
             gs_path = '%s%s' % (self._gs_uri, dest_path)
+            # Send a message to the cloud console ( the gcsuri + /starting )
+            # on every upload.  This allows for easier debugging as it will
+            # be possible to see the uploads that were attempted but did not
+            # succeed.
             if self._console_client:
                 gcs_uri = os.path.join(gs_path, os.path.basename(dir_entry))
                 if not self._console_client.send_test_job_offloaded_message(
@@ -1048,13 +1052,13 @@ class Offloader(object):
                 multiprocessing = GS_OFFLOADER_MULTIPROCESSING
             logging.info(
                     'Offloader multiprocessing is set to:%r', multiprocessing)
-            console_client = None
+            self.console_client = None
             if (cloud_console_client and not options.process_hosts_only and
                     cloud_console_client.is_cloud_notification_enabled()):
-                console_client = cloud_console_client.PubSubBasedClient()
+                self.console_client = cloud_console_client.PubSubBasedClient()
             self._gs_offloader = GSOffloader(
                     self.gs_uri, multiprocessing, self._delete_age_limit,
-                    console_client)
+                    self.console_client)
         classlist = [
                 job_directories.SwarmingJobDirectory,
         ]
@@ -1067,7 +1071,7 @@ class Offloader(object):
         self._processes = options.parallelism
         self._open_jobs = {}
         self._pusub_topic = None
-        self._offload_count_limit = 3
+        self._offload_count_limit = 10
 
 
     def _add_new_jobs(self):
@@ -1117,6 +1121,8 @@ class Offloader(object):
                        j.first_offload_start]
         self._report_failed_jobs_count(failed_jobs)
         self._log_failed_jobs_locally(failed_jobs)
+        if self.console_client:
+            self._send_failed_jobs_to_console(failed_jobs)
 
 
     def offload_once(self):
@@ -1151,6 +1157,16 @@ class Offloader(object):
         for job in self._open_jobs.values():
             if job.offload_count >= self._offload_count_limit:
                 _mark_uploaded(job.dirname)
+
+
+    def _send_failed_jobs_to_console(self, failed_jobs)
+        """Send cloud console a pubsub for every failed upload.
+
+        @param failed_jobs: A list of failed _JobDirectory objects.
+        """
+        for job in failed_jobs:
+          msg = "%s/%d/failed" % (job.dirname, job.offload_count)
+          self.console_client.send_test_job_offloaded_message(msg)
 
 
     def _log_failed_jobs_locally(self, failed_jobs,
