@@ -1159,7 +1159,7 @@ class Offloader(object):
                 _mark_uploaded(job.dirname)
 
 
-    def _send_failed_jobs_to_console(self, failed_jobs)
+    def _send_failed_jobs_to_console(self, failed_jobs):
         """Send cloud console a pubsub for every failed upload.
 
         @param failed_jobs: A list of failed _JobDirectory objects.
