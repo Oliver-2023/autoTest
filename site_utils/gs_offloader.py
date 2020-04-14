@@ -1165,8 +1165,8 @@ class Offloader(object):
         @param failed_jobs: A list of failed _JobDirectory objects.
         """
         for job in failed_jobs:
-          msg = "%s/%d/failed" % (job.dirname, job.offload_count)
-          self.console_client.send_test_job_offloaded_message(msg)
+          m = "%s%s/%d/failed" % (self.gs_uri, job.dirname, job.offload_count)
+          self.console_client.send_test_job_offloaded_message(m)
 
 
     def _log_failed_jobs_locally(self, failed_jobs,
