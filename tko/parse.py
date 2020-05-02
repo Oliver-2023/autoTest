@@ -409,6 +409,14 @@ def parse_one(db, pid_file_manager, jobname, path, parse_options):
 
     message = "\n".join(message_lines)
 
+    # Serializing job into a binary file
+    export_tko_to_file = global_config.global_config.get_config_value(
+            'AUTOSERV', 'export_tko_job_to_file', type=bool, default=False)
+
+    binary_file_name = os.path.join(path, "job.serialize")
+    if export_tko_to_file:
+        export_tko_job_to_file(job, jobname, binary_file_name)
+
     if not dry_run:
         # send out a email report of failure
         if len(message) > 2 and mail_on_failure:
@@ -455,15 +463,7 @@ def parse_one(db, pid_file_manager, jobname, path, parse_options):
                     afe_job_id=orig_afe_job_id).job_idx
             _invalidate_original_tests(orig_job_idx, job.job_idx)
 
-    # Serializing job into a binary file
-    export_tko_to_file = global_config.global_config.get_config_value(
-            'AUTOSERV', 'export_tko_job_to_file', type=bool, default=False)
-
-    binary_file_name = os.path.join(path, "job.serialize")
-    if export_tko_to_file:
-        export_tko_job_to_file(job, jobname, binary_file_name)
-
-    if not dry_run:
+   if not dry_run:
         db.commit()
 
     # Generate a suite report.
