@@ -463,7 +463,7 @@ def parse_one(db, pid_file_manager, jobname, path, parse_options):
                     afe_job_id=orig_afe_job_id).job_idx
             _invalidate_original_tests(orig_job_idx, job.job_idx)
 
-   if not dry_run:
+    if not dry_run:
         db.commit()
 
     # Generate a suite report.
