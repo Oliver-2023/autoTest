@@ -93,4 +93,3 @@ class policy_DeviceAutoUpdateDisabled(
             self._test_update_disabled(nebraska.get_update_url(),
                                        should_update=case is not True)
 
-        self.cleanup()
