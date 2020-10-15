@@ -38,6 +38,7 @@ class FingerprintTest(test.test):
         'TEST_IMAGE_DEV_RB_NINE': '%s.dev.rb9'
     }
 
+    _ROLLBACK_ZERO_BLOCK_ID = '0'
     _ROLLBACK_INITIAL_BLOCK_ID = '1'
     _ROLLBACK_INITIAL_MIN_VERSION = '0'
     _ROLLBACK_INITIAL_RW_VERSION = '0'
@@ -738,6 +739,17 @@ class FingerprintTest(test.test):
         result = self.run_cmd(flash_cmd)
         if result.exit_status != 0:
             raise error.TestFail('Flashing RW firmware failed')
+
+    def is_rollback_unset(self):
+        """
+        Returns True if rollbackinfo matches the uninitialized value that it
+        should have after flashing the entire flash.
+        """
+        return (self.get_rollback_id() == self._ROLLBACK_ZERO_BLOCK_ID
+                and self.get_rollback_min_version() ==
+                self._ROLLBACK_INITIAL_MIN_VERSION
+                and self.get_rollback_rw_version() ==
+                self._ROLLBACK_INITIAL_RW_VERSION)
 
     def biod_upstart_job_enabled(self):
         """Returns whether biod's upstart job file is at original location."""
