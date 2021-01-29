@@ -24,11 +24,22 @@ import json
 import tempfile
 import yaml
 
+_INPUT_DEVICE_PREFIX = set([
+        'hwid_component:touchpad',
+        'hwid_component:touchscreen',
+        'hwid_component:stylus',
+])
+
 def run(machine):
     host = hosts.create_host(machine)
     with tempfile.NamedTemporaryFile(suffix='.yaml') as temp_file:
         host_info = host.host_info_store.get()
-        yaml.dump({"autotest_host_info_labels": json.dumps(host_info.labels)},
+        labels = host_info.labels
+
+        if 'model:fleex' in labels:
+            labels = [label for label in labels
+                      if label.split('/')[0] not in _INPUT_DEVICE_PREFIX]
+        yaml.dump({'autotest_host_info_labels': json.dumps(labels)},
                   stream=temp_file)
         job.run_test('tast',
                      host=host,
