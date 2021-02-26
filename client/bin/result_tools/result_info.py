@@ -6,6 +6,7 @@
 """Wrapper class to store size related information of test results.
 """
 
+import collections
 import contextlib
 import json
 import os
@@ -149,7 +150,7 @@ class ResultInfo(dict):
         # Dictionary to store details of the given path is set to a keyval of
         # the wrapper class. Save the dictionary to an attribute for faster
         # access.
-        self._details = {}
+        self._details = collections.defaultdict(list)
         self[self.name] = self._details
 
         # rstrip is to remove / when name is ROOT_DIR ('').
@@ -190,7 +191,7 @@ class ResultInfo(dict):
         # Dictionary to store details of the given path is set to a keyval of
         # the wrapper class. Save the dictionary to an attribute for faster
         # access.
-        self._details = {}
+        self._details = collections.defaultdict(list)
         self[self.name] = self._details
 
         # rstrip is to remove / when name is ROOT_DIR ('').
