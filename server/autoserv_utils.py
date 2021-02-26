@@ -4,6 +4,7 @@
 # found in the LICENSE file.
 
 import os
+import sys
 
 import common
 from autotest_lib.client.common_lib import control_data
