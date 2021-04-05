@@ -155,6 +155,14 @@ CONFIG['NEEDS_CTS_HELPERS'] = [
         'CtsPrintTestCases',
 ]
 
+CONFIG['SPLIT_BY_BITS_MODULES'] = [
+        'CtsMediaTestCases',
+]
+
+CONFIG['USE_OLD_ADB'] = [
+        'CtsStatsdHostTestCases',
+]
+
 # Modules that are known to need the default apps of Chrome (eg. Files.app).
 CONFIG['ENABLE_DEFAULT_APPS'] = [
         'CtsAppSecurityHostTestCases',
