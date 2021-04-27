@@ -6,13 +6,16 @@ import grpc
 import logging
 import time
 
-import common_pb2
-import common_pb2_grpc
-
 from autotest_lib.client.common_lib import error
 from autotest_lib.client.common_lib import utils
 
 TLS_PORT = 7152
+
+# Work around to support AU fork on R90 and prior. This will allow other files which import this
+# module to not break. No files actually run code for this module as its locked behind a hard-coded
+# parameter in this branch.
+common_pb2 = None
+common_pb2_grpc = None
 
 
 class TLSClient(object):
