@@ -1,3 +1,0 @@
-This dir is a fork of the ToT (R92) tls_client. It is needed to safely
-backport the AU protos to older branches, in support of dev-server
-deprication.
