@@ -7,11 +7,14 @@ import logging
 import six
 import time
 
-from autotest_lib.server.hosts.drone_api_client import autotest_common_pb2
-from autotest_lib.server.hosts.drone_api_client import autotest_common_pb2_grpc
-
 from autotest_lib.client.common_lib import error
 from autotest_lib.client.common_lib import utils
+
+# Work around to support AU fork on R90 and prior. This will allow other files which import this
+# module to not break. No files actually run code for this module as its locked behind a hard-coded
+# parameter in this branch.
+autotest_common_pb2_grpc = None
+autotest_common_pb2 = None
 
 TLS_PORT = 7152
 TLS_IP = '10.254.254.254'
