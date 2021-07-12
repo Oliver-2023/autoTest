@@ -153,6 +153,10 @@ CONFIG['MEDIA_MODULES'] = [
 CONFIG['NEEDS_PUSH_MEDIA'] = CONFIG['MEDIA_MODULES'] + [
         'CtsMediaTestCases.audio',
         'CtsMediaTestCases.video',
+        'CtsMediaTestCases.testGLViewDecodeAccuracy',
+        'CtsMediaTestCases.testGLViewLargerHeightDecodeAccuracy',
+        'CtsMediaTestCases.testGLViewLargerWidthDecodeAccuracy',
+        'CtsMediaTestCases.exclude-GLView',
 ]
 
 CONFIG['NEEDS_CTS_HELPERS'] = [
@@ -276,8 +280,13 @@ CONFIG['EXTRA_MODULES'] = {
                 'SUBMODULES': set([
                         'CtsMediaTestCases.audio',
                         'CtsMediaTestCases.video',
+                        'CtsMediaTestCases.testGLViewDecodeAccuracy',
+                        'CtsMediaTestCases.testGLViewLargerHeightDecodeAccuracy',
+                        'CtsMediaTestCases.testGLViewLargerWidthDecodeAccuracy',
+                        'CtsMediaTestCases.exclude-GLView',
                 ]),
-                'SUITES': ['suite:arc-cts-r'],
+                'SUITES':
+                ['suite:arc-cts-r', 'suite:arc-cts', 'suite:arc-cts-qual'],
         },
         'CtsWindowManagerDeviceTestCases': {
                 'SUBMODULES': set([
@@ -303,16 +312,16 @@ CONFIG['EXTRA_MODULES'] = {
 # Moblab optionally can reshard modules, this was originally used
 # for deqp but it is no longer required for that module.  Retaining
 # feature in case future slower module needs to be sharded.
-CONFIG['PUBLIC_EXTRA_MODULES'] = {}
+CONFIG['PUBLIC_EXTRA_MODULES'] = {
+        'CtsMediaTestCases': [
+                'CtsMediaTestCases.testGLViewDecodeAccuracy',
+                'CtsMediaTestCases.testGLViewLargerHeightDecodeAccuracy',
+                'CtsMediaTestCases.testGLViewLargerWidthDecodeAccuracy',
+                'CtsMediaTestCases.exclude-GLView',
+        ]
+}
 
-# TODO(haddowk,kinaba): Hack for b/138622686. Clean up later.
 CONFIG['EXTRA_SUBMODULE_OVERRIDE'] = {
-        'x86': {
-                'CtsDeqpTestCases.dEQP-VK.subgroups.arithmetic': [
-                        'CtsDeqpTestCases.dEQP-VK.subgroups.arithmetic.32',
-                        'CtsDeqpTestCases.dEQP-VK.subgroups.arithmetic.64',
-                ]
-        }
 }
 
 CONFIG['EXTRA_COMMANDLINE'] = {
@@ -598,6 +607,28 @@ CONFIG['EXTRA_COMMANDLINE'] = {
                'CtsMediaTestCases android.media.cts.VideoCodecTest',
                '--include-filter',
                'CtsMediaTestCases android.media.cts.VideoEncoderTest',
+        ],
+        'CtsMediaTestCases.testGLViewDecodeAccuracy': [
+                '--include-filter',
+                'CtsMediaTestCases android.media.cts.DecodeAccuracyTest#testGLViewDecodeAccuracy'
+        ],
+        'CtsMediaTestCases.testGLViewLargerHeightDecodeAccuracy': [
+                '--include-filter',
+                'CtsMediaTestCases android.media.cts.DecodeAccuracyTest#testGLViewLargerHeightDecodeAccuracy',
+        ],
+        'CtsMediaTestCases.testGLViewLargerWidthDecodeAccuracy': [
+                '--include-filter',
+                'CtsMediaTestCases android.media.cts.DecodeAccuracyTest#testGLViewLargerWidthDecodeAccuracy',
+        ],
+        'CtsMediaTestCases.exclude-GLView': [
+                '-m',
+                'CtsMediaTestCases',
+                '--exclude-filter',
+                'CtsMediaTestCases android.media.cts.DecodeAccuracyTest#testGLViewDecodeAccuracy',
+                '--exclude-filter',
+                'CtsMediaTestCases android.media.cts.DecodeAccuracyTest#testGLViewLargerHeightDecodeAccuracy',
+                '--exclude-filter',
+                'CtsMediaTestCases android.media.cts.DecodeAccuracyTest#testGLViewLargerWidthDecodeAccuracy',
         ],
         'CtsWindowManager.A': [
                '--include-filter',
