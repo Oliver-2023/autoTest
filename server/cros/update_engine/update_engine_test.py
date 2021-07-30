@@ -67,6 +67,8 @@ class UpdateEngineTest(test.test, update_engine_util.UpdateEngineUtil):
     # Paygen.json file provides information about all builds on all channels.
     _PAYGEN_JSON_URI = 'gs://chromeos-build-release-console/paygen.json'
 
+    _CORRUPT_STATEFUL_PATH = '/mnt/stateful_partition/.corrupt_stateful'
+
     def initialize(self, host=None, hosts=None):
         """
         Sets default variables for the test.
@@ -719,6 +721,9 @@ class UpdateEngineTest(test.test, update_engine_util.UpdateEngineUtil):
 
     def _restore_stateful(self):
         """Restore the stateful partition after a destructive test."""
+        # Fallback to lab provisioning if this function fails to restore.
+        self._run(['touch', self._CORRUPT_STATEFUL_PATH])
+
         # Stage stateful payload.
         ds_url, build = tools.get_devserver_build_from_package_url(
                 self._job_repo_url)
