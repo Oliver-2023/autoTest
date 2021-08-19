@@ -195,9 +195,16 @@ _DISPLAY_REFRESH_COMMANDS = [
         "'android-sh -c \\'am start -a android.intent.action.VIEW -d https://webglsamples.org/aquarium/aquarium.html\\''"
 ]
 
+_MUTE_COMMAND = "\'cras_test_client --mute 1\'"
+
 # Preconditions applicable to public and internal tests.
 CONFIG['PRECONDITION'] = {
         'CtsCameraTestCases.NativeCameraDeviceTest': _DISPLAY_REFRESH_COMMANDS,
+        'CtsMediaStressTestCases': [_MUTE_COMMAND],
+        'CtsMediaTestCases': [_MUTE_COMMAND],
+        'CtsMediaTestCases.audio': [_MUTE_COMMAND],
+        'CtsMediaTestCases.exclude-GLView': [_MUTE_COMMAND],
+        'CtsMediaTestCases.video': [_MUTE_COMMAND],
 }
 
 CONFIG['LOGIN_PRECONDITION'] = {
