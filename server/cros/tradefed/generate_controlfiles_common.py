@@ -1145,8 +1145,23 @@ def write_moblab_controlfiles(modules, abi, revision, build, uri, is_public):
         # option will cover variants with optional parameters.
         if is_parameterized_module(module):
             continue
-        write_controlfile(module, set([module]), abi, revision, build, uri,
-                          [CONFIG['MOBLAB_SUITE_NAME']], is_public)
+        if module in CONFIG.get('PUBLIC_SPLIT_BY_BITS_MODULES', []):
+            # If |abi| is predefined (like CTS), splits the modules by
+            # 32/64-bits. If not (like GTS) generate both arm and x86 jobs.
+            for abi_arch in [abi] if abi else ['arm', 'x86']:
+                for abi_bits in [32, 64]:
+                    write_controlfile(module,
+                                      set([module]),
+                                      abi_arch,
+                                      revision,
+                                      build,
+                                      uri,
+                                      [CONFIG['MOBLAB_SUITE_NAME']],
+                                      is_public,
+                                      abi_bits=abi_bits)
+        else:
+            write_controlfile(module, set([module]), abi, revision, build, uri,
+                              [CONFIG['MOBLAB_SUITE_NAME']], is_public)
 
 
 def write_regression_controlfiles(modules, abi, revision, build, uri,
@@ -1175,17 +1190,20 @@ def write_regression_controlfiles(modules, abi, revision, build, uri,
         combined = combine_modules_by_common_word(set(modules))
         for key in combined:
             if combined[key] & set(CONFIG.get('SPLIT_BY_BITS_MODULES', [])):
-                for abi_bits in [32, 64]:
-                    write_controlfile(key,
-                                      combined[key],
-                                      abi,
-                                      revision,
-                                      build,
-                                      uri,
-                                      None,
-                                      is_public,
-                                      is_latest,
-                                      abi_bits=abi_bits)
+                # If |abi| is predefined (like CTS), splits the modules by
+                # 32/64-bits. If not (like GTS) generate both arm and x86 jobs.
+                for abi_arch in [abi] if abi else ['arm', 'x86']:
+                    for abi_bits in [32, 64]:
+                        write_controlfile(key,
+                                          combined[key],
+                                          abi_arch,
+                                          revision,
+                                          build,
+                                          uri,
+                                          None,
+                                          is_public,
+                                          is_latest,
+                                          abi_bits=abi_bits)
             else:
                 write_controlfile(key, combined[key], abi, revision, build,
                                   uri, None, is_public, is_latest)
@@ -1203,17 +1221,20 @@ def write_qualification_controlfiles(modules, abi, revision, build, uri,
     combined = combine_modules_by_bookmark(set(modules))
     for key in combined:
         if combined[key] & set(CONFIG.get('SPLIT_BY_BITS_MODULES', [])):
-            for abi_bits in [32, 64]:
-                write_controlfile('all.' + key,
-                                  combined[key],
-                                  abi,
-                                  revision,
-                                  build,
-                                  uri,
-                                  CONFIG.get('QUAL_SUITE_NAMES'),
-                                  is_public,
-                                  is_latest,
-                                  abi_bits=abi_bits)
+            # If |abi| is predefined (like CTS), splits the modules by
+            # 32/64-bits. If not (like GTS) generate both arm and x86 jobs.
+            for abi_arch in [abi] if abi else ['arm', 'x86']:
+                for abi_bits in [32, 64]:
+                    write_controlfile('all.' + key,
+                                      combined[key],
+                                      abi_arch,
+                                      revision,
+                                      build,
+                                      uri,
+                                      CONFIG.get('QUAL_SUITE_NAMES'),
+                                      is_public,
+                                      is_latest,
+                                      abi_bits=abi_bits)
         else:
             write_controlfile('all.' + key, combined[key], abi,
                               revision, build, uri,
