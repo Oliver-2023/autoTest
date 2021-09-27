@@ -190,8 +190,16 @@ _WIFI_CONNECT_COMMANDS = [
         "'android-sh -c \\'dumpsys wifi transports -eth\\''"
 ]
 
+_DISPLAY_REFRESH_COMMANDS = [
+        "'sleep 20'",  # Wait for the intent helper mojo connection established
+        "'android-sh -c \\'am start -a android.intent.action.VIEW -d https://webglsamples.org/aquarium/aquarium.html\\''"
+]
+
 # Preconditions applicable to public and internal tests.
-CONFIG['PRECONDITION'] = {}
+CONFIG['PRECONDITION'] = {
+        'CtsCameraTestCases.NativeCameraDeviceTest': _DISPLAY_REFRESH_COMMANDS,
+}
+
 CONFIG['LOGIN_PRECONDITION'] = {
         'CtsAppSecurityHostTestCases': [_EJECT_REMOVABLE_DISK_COMMAND],
         'CtsJobSchedulerTestCases': [_EJECT_REMOVABLE_DISK_COMMAND],
@@ -202,6 +210,7 @@ CONFIG['LOGIN_PRECONDITION'] = {
 
 # Preconditions applicable to public tests.
 CONFIG['PUBLIC_PRECONDITION'] = {
+        'CtsCameraTestCases.NativeCameraDeviceTest': _DISPLAY_REFRESH_COMMANDS,
         'CtsHostsideNetworkTests': _WIFI_CONNECT_COMMANDS,
         'CtsLibcoreTestCases': _WIFI_CONNECT_COMMANDS,
         'CtsNetApi23TestCases': _WIFI_CONNECT_COMMANDS,
@@ -267,6 +276,13 @@ CONFIG['DISABLE_LOGCAT_ON_FAILURE'] = set([
 ])
 
 CONFIG['EXTRA_MODULES'] = {
+        'CtsCameraTestCases': {
+                'SUBMODULES':
+                set([
+                        'CtsCameraTestCases.NativeCameraDeviceTest',
+                ]),
+                'SUITES': ['suite:arc-cts', 'suite:arc-cts-qual'],
+        }
         'CtsDeqpTestCases': {
                 'SUBMODULES':
                 set([
@@ -318,6 +334,9 @@ CONFIG['EXTRA_MODULES'] = {
 # for deqp but it is no longer required for that module.  Retaining
 # feature in case future slower module needs to be sharded.
 CONFIG['PUBLIC_EXTRA_MODULES'] = {
+        'CtsCameraTestCases': [
+                'CtsCameraTestCases.NativeCameraDeviceTest',
+        ],
         'CtsMediaTestCases': [
                 'CtsMediaTestCases.testGLViewDecodeAccuracy',
                 'CtsMediaTestCases.testGLViewLargerHeightDecodeAccuracy',
@@ -330,6 +349,10 @@ CONFIG['EXTRA_SUBMODULE_OVERRIDE'] = {
 }
 
 CONFIG['EXTRA_COMMANDLINE'] = {
+        'CtsCameraTestCases.NativeCameraDeviceTest': [
+                '--include-filter',
+                'CtsCameraTestCases android.hardware.camera2.cts.NativeCameraDeviceTest',
+        ],
         'CtsDeqpTestCases.dEQP-EGL': [
                 '--include-filter', 'CtsDeqpTestCases', '--module',
                 'CtsDeqpTestCases', '--test', 'dEQP-EGL.*'
