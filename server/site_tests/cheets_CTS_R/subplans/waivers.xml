@@ -58,6 +58,7 @@
   <Entry include="CtsGraphicsTestCases android.graphics.cts.ImageDecoderTest#testSetAllocatorDecodeBitmap[6]" />
   <Entry include="CtsGraphicsTestCases android.graphics.cts.ImageDecoderTest#testSetAllocatorDecodeBitmap[7]" />
   <Entry include="CtsGraphicsTestCases android.graphics.cts.ImageDecoderTest#testSetAllocatorDecodeBitmap[8]" />
+  <Entry include="CtsGraphicsTestCases android.graphics.drawable.cts.VectorDrawableTest#testMutate" />
   <Entry include="CtsGraphicsTestCases[instant] android.graphics.cts.AImageDecoderTest#testCropResource[0]" />
   <Entry include="CtsGraphicsTestCases[instant] android.graphics.cts.AImageDecoderTest#testCropResource[1]" />
   <Entry include="CtsGraphicsTestCases[instant] android.graphics.cts.AImageDecoderTest#testCropResource[2]" />
