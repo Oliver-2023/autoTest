@@ -79,6 +79,9 @@ CONFIG['CTS_TIMEOUT'] = {
         'CtsLibcoreOjTestCases': 2.0,
         'CtsMediaStressTestCases': 5.0,
         'CtsMediaTestCases': 10.0,
+        'CtsMediaTestCases.DecodeAccuracyTest': 2.0,
+        'CtsMediaTestCases.VideoDecoderPerfAndEncoderTest': 3.0,
+        'CtsMediaTestCases.other': 10.0,
         'CtsPrintTestCases': 1.5,
         'CtsSecurityTestCases': 2.0,
         'CtsVideoTestCases': 1.5,
@@ -180,6 +183,9 @@ CONFIG['MEDIA_MODULES'] = [
 
 CONFIG['NEEDS_PUSH_MEDIA'] = CONFIG['MEDIA_MODULES'] + [
     'CtsMediaTestCases.audio',
+    'CtsMediaTestCases.DecodeAccuracyTest',
+    'CtsMediaTestCases.VideoDecoderPerfAndEncoderTest',
+    'CtsMediaTestCases.other',
 ]
 CONFIG['SPLIT_BY_BITS_MODULES'] = [
         'CtsDeqpTestCases',
@@ -191,7 +197,10 @@ CONFIG['SPLIT_BY_BITS_MODULES'] = [
 # config. To reduce the flakiness, let us suppress the config.
 CONFIG['NEEDS_DYNAMIC_CONFIG_ON_COLLECTION'] = False
 CONFIG['NEEDS_DYNAMIC_CONFIG'] = CONFIG['MEDIA_MODULES'] + [
-    'CtsIntentSignatureTestCases'
+    'CtsIntentSignatureTestCases',
+    'CtsMediaTestCases.DecodeAccuracyTest',
+    'CtsMediaTestCases.VideoDecoderPerfAndEncoderTest',
+    'CtsMediaTestCases.other',
 ]
 
 # Modules that are known to need the default apps of Chrome (eg. Files.app).
@@ -231,12 +240,16 @@ CONFIG['PRECONDITION'] = {
         'CtsMediaStressTestCases': [_MUTE_COMMAND],
         'CtsMediaTestCases': [_MUTE_COMMAND],
         'CtsMediaTestCases.audio': [_MUTE_COMMAND],
+        'CtsMediaTestCases.DecodeAccuracyTest': [_MUTE_COMMAND],
+        'CtsMediaTestCases.VideoDecoderPerfAndEncoderTest': [_MUTE_COMMAND],
+        'CtsMediaTestCases.other': [_MUTE_COMMAND],
         'CtsNetTestCases': [_START_MDNS_COMMAND],
 }
 CONFIG['LOGIN_PRECONDITION'] = {
     'CtsAppSecurityHostTestCases': [_EJECT_REMOVABLE_DISK_COMMAND],
     'CtsJobSchedulerTestCases': [_EJECT_REMOVABLE_DISK_COMMAND],
     'CtsMediaTestCases': [_EJECT_REMOVABLE_DISK_COMMAND],
+    'CtsMediaTestCases.other': [_EJECT_REMOVABLE_DISK_COMMAND],
     'CtsOsTestCases': [_EJECT_REMOVABLE_DISK_COMMAND],
     'CtsProviderTestCases': [_EJECT_REMOVABLE_DISK_COMMAND],
 }
@@ -326,8 +339,11 @@ CONFIG['EXTRA_MODULES'] = {
     'CtsMediaTestCases': {
         'SUBMODULES': set([
             'CtsMediaTestCases.audio',
+            'CtsMediaTestCases.DecodeAccuracyTest',
+            'CtsMediaTestCases.VideoDecoderPerfAndEncoderTest',
+            'CtsMediaTestCases.other',
         ]),
-        'SUITES': ['suite:arc-cts'],
+        'SUITES': ['suite:arc-cts', 'suite:arc-cts-qual'],
     },
     _WM_PRESUBMIT: {
         'SUBMODULES': set([_WM_PRESUBMIT]),
@@ -381,6 +397,11 @@ CONFIG['PUBLIC_EXTRA_MODULES'] = {
         'CtsDeqpTestCases.dEQP-VK.wsi',
         'CtsDeqpTestCases.dEQP-VK.ycbcr'
     ]
+    'CtsMediaTestCases': {
+        'CtsMediaTestCases.DecodeAccuracyTest',
+        'CtsMediaTestCases.VideoDecoderPerfAndEncoderTest',
+        'CtsMediaTestCases.other',
+    }
 }
 # TODO(haddowk,kinaba): Hack for b/138622686. Clean up later.
 CONFIG['EXTRA_SUBMODULE_OVERRIDE'] = {
@@ -598,6 +619,19 @@ CONFIG['EXTRA_COMMANDLINE'] = {
         '--include-filter', 'CtsMediaTestCases android.media.cts.SoundPoolMidiTest',
         '--include-filter', 'CtsMediaTestCases android.media.cts.SoundPoolOggTest',
         '--include-filter', 'CtsMediaTestCases android.media.cts.VolumeShaperTest',
+    ],
+    'CtsMediaTestCases.DecodeAccuracyTest': [
+        '--include-filter', 'CtsMediaTestCases android.media.cts.DecodeAccuracyTest',
+    ],
+    'CtsMediaTestCases.VideoDecoderPerfAndEncoderTest': [
+        '--include-filter', 'CtsMediaTestCases android.media.cts.VideoDecoderPerfTest',
+        '--include-filter', 'CtsMediaTestCases android.media.cts.VideoEncoderTest',
+    ],
+    'CtsMediaTestCases.other': [
+        '--module', 'CtsMediaTestCases',
+        '--exclude-filter', 'CtsMediaTestCases android.media.cts.DecodeAccuracyTest',
+        '--exclude-filter', 'CtsMediaTestCases android.media.cts.VideoDecoderPerfTest',
+        '--exclude-filter', 'CtsMediaTestCases android.media.cts.VideoEncoderTest',
     ],
     _WM_PRESUBMIT: [
         '--include-filter', 'CtsActivityManagerDeviceSdk25TestCases',
