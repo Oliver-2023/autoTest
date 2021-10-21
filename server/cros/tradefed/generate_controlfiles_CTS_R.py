@@ -357,8 +357,10 @@ CONFIG['EXTRA_SUBMODULE_OVERRIDE'] = {
 
 CONFIG['EXTRA_COMMANDLINE'] = {
         'CtsCameraTestCases.NativeCameraDeviceTest': [
-                '--include-filter',
-                'CtsCameraTestCases android.hardware.camera2.cts.NativeCameraDeviceTest',
+                '--module',
+                'CtsCameraTestCases',
+                '--test',
+                'android.hardware.camera2.cts.NativeCameraDeviceTest',
         ],
         'CtsDeqpTestCases.dEQP-EGL': [
                 '--include-filter', 'CtsDeqpTestCases', '--module',
