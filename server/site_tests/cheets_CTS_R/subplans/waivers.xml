@@ -49,6 +49,7 @@
   <Entry include="CtsSecurityTestCases android.security.cts.EncryptionTest#testEncryption" />
   <Entry include="CtsStatsdHostTestCases android.cts.statsd.metric.MetricActivationTests#testMultipleActivations" />
   <Entry include="CtsStatsdHostTestCases[instant] android.cts.statsd.metric.MetricActivationTests#testMultipleActivations" />
+  <Entry include="CtsSyncAccountAccessOtherCertTestCases com.android.cts.content.CtsSyncAccountAccessOtherCertTestCases#testAccountAccess_otherCertAsAuthenticatorCanNotSeeAccount" />
   <Entry include="CtsWifiTestCases android.net.wifi.cts.WifiManagerTest#testWifiScanTimestamp" />
   <Entry include="CtsWindowManagerDeviceTestCases android.server.wm.AnrTests#slowUiThreadWithKeyEventTriggersAnr" />
   <Entry include="CtsWindowManagerDeviceTestCases android.server.wm.WindowInsetsAnimationTests#testAnimationCallbacks_overlapping" />
