@@ -12,4 +12,5 @@
   <Entry include="CtsGraphicsTestCases android.graphics.drawable.cts.VectorDrawableTest#testMutate" />
   <Entry include="CtsNetTestCases android.net.cts.TrafficStatsTest#testTrafficStatsForLocalhost" />
   <Entry include="CtsNetTestCases android.net.wifi.cts.WifiManagerTest#testWifiScanTimestamp" />
+  <Entry include="CtsSyncAccountAccessOtherCertTestCases com.android.cts.content.CtsSyncAccountAccessOtherCertTestCases#testAccountAccess_otherCertAsAuthenticatorCanNotSeeAccount" />
 </SubPlan>
