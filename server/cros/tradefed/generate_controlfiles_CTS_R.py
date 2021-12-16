@@ -79,7 +79,6 @@ CONFIG['CTS_TIMEOUT'] = {
         'CtsLibcoreOjTestCases': 2.0,
         'CtsMediaStressTestCases': 5.0,
         'CtsMediaTestCases': 10.0,
-        'CtsMediaTestCases.exclude-GLView': 10.0,
         'CtsMediaTestCases.video': 10.0,
         'CtsNNAPIBenchmarkTestCases': 2.0,
         'CtsPrintTestCases': 1.5,
@@ -161,10 +160,6 @@ CONFIG['NEEDS_PUSH_MEDIA'] = CONFIG['MEDIA_MODULES'] + [
         'CtsMediaTestCases.audio',
         'CtsMediaTestCases.perf',
         'CtsMediaTestCases.video',
-        'CtsMediaTestCases.testGLViewDecodeAccuracy',
-        'CtsMediaTestCases.testGLViewLargerHeightDecodeAccuracy',
-        'CtsMediaTestCases.testGLViewLargerWidthDecodeAccuracy',
-        'CtsMediaTestCases.exclude-GLView',
 ]
 
 CONFIG['NEEDS_CTS_HELPERS'] = [
@@ -197,8 +192,6 @@ _WIFI_CONNECT_COMMANDS = [
         "'android-sh -c \\'dumpsys wifi transports -eth\\''"
 ]
 
-_MUTE_COMMAND = "\'cras_test_client --mute 1\'"
-
 _DISPLAY_REFRESH_COMMANDS = [
         "'sleep 20'",  # Wait for the intent helper mojo connection established
         "'android-sh -c \\'am start -a android.intent.action.VIEW -d https://webglsamples.org/aquarium/aquarium.html\\''"
@@ -207,11 +200,6 @@ _DISPLAY_REFRESH_COMMANDS = [
 # Preconditions applicable to public and internal tests.
 CONFIG['PRECONDITION'] = {
         'CtsCameraTestCases.NativeCameraDeviceTest': _DISPLAY_REFRESH_COMMANDS,
-        'CtsMediaStressTestCases': [_MUTE_COMMAND],
-        'CtsMediaTestCases': [_MUTE_COMMAND],
-        'CtsMediaTestCases.audio': [_MUTE_COMMAND],
-        'CtsMediaTestCases.exclude-GLView': [_MUTE_COMMAND],
-        'CtsMediaTestCases.video': [_MUTE_COMMAND],
 }
 
 CONFIG['LOGIN_PRECONDITION'] = {
@@ -323,10 +311,6 @@ CONFIG['EXTRA_MODULES'] = {
         'CtsMediaTestCases.audio': R_REGRESSION_AND_QUAL_SUITES,
         'CtsMediaTestCases.perf': R_REGRESSION_AND_QUAL_SUITES,
         'CtsMediaTestCases.video': R_REGRESSION_AND_QUAL_SUITES,
-        'CtsMediaTestCases.testGLViewDecodeAccuracy': R_REGRESSION_AND_QUAL_SUITES,
-        'CtsMediaTestCases.testGLViewLargerHeightDecodeAccuracy': R_REGRESSION_AND_QUAL_SUITES,
-        'CtsMediaTestCases.testGLViewLargerWidthDecodeAccuracy': R_REGRESSION_AND_QUAL_SUITES,
-        'CtsMediaTestCases.exclude-GLView': R_REGRESSION_AND_QUAL_SUITES,
     },
     'CtsWindowManagerDeviceTestCases': {
         'CtsWindowManager.A': R_REGRESSION_SUITES,
@@ -361,12 +345,6 @@ CONFIG['HARDWAREONLY_EXTRA_MODULES'] = {
         'CtsMediaStressTestCases': {
                 'CtsMediaStressTestCases.camera': [],
         },
-        'CtsMediaTestCases': {
-                'CtsMediaTestCases.testGLViewDecodeAccuracy': [],
-                'CtsMediaTestCases.testGLViewLargerHeightDecodeAccuracy': [],
-                'CtsMediaTestCases.testGLViewLargerWidthDecodeAccuracy': [],
-                'CtsMediaTestCases.exclude-GLView': [],
-        },
         'CtsPermissionTestCases': {
                 'CtsPermissionTestCases.camera': [],
         },
@@ -379,16 +357,6 @@ CONFIG['PUBLIC_EXTRA_MODULES'] = {
         'CtsCameraTestCases': {
              'CtsCameraTestCases.NativeCameraDeviceTest':
                 [CONFIG['MOBLAB_SUITE_NAME']],
-        },
-        'CtsMediaTestCases': {
-             'CtsMediaTestCases.testGLViewDecodeAccuracy': [
-                 CONFIG['MOBLAB_SUITE_NAME']],
-             'CtsMediaTestCases.testGLViewLargerHeightDecodeAccuracy': [
-                 CONFIG['MOBLAB_SUITE_NAME']],
-             'CtsMediaTestCases.testGLViewLargerWidthDecodeAccuracy': [
-                 CONFIG['MOBLAB_SUITE_NAME']],
-             'CtsMediaTestCases.exclude-GLView': [
-                 CONFIG['MOBLAB_SUITE_NAME']],
         },
 }
 
@@ -702,32 +670,6 @@ CONFIG['EXTRA_COMMANDLINE'] = {
                 'CtsMediaTestCases android.media.cts.VideoCodecTest',
                 '--include-filter',
                 'CtsMediaTestCases android.media.cts.VideoEncoderTest',
-        ],
-        'CtsMediaTestCases.testGLViewDecodeAccuracy': [
-                '--include-filter',
-                'CtsMediaTestCases android.media.cts.DecodeAccuracyTest#testGLViewDecodeAccuracy'
-        ],
-        'CtsMediaTestCases.testGLViewLargerHeightDecodeAccuracy': [
-                '--include-filter',
-                'CtsMediaTestCases android.media.cts.DecodeAccuracyTest#testGLViewLargerHeightDecodeAccuracy',
-        ],
-        'CtsMediaTestCases.testGLViewLargerWidthDecodeAccuracy': [
-                '--include-filter',
-                'CtsMediaTestCases android.media.cts.DecodeAccuracyTest#testGLViewLargerWidthDecodeAccuracy',
-        ],
-        'CtsMediaTestCases.exclude-GLView': [
-                '--module',
-                'CtsMediaTestCases',
-                '--exclude-filter',
-                'CtsMediaTestCases android.media.cts.DecodeAccuracyTest#testGLViewDecodeAccuracy',
-                '--exclude-filter',
-                'CtsMediaTestCases android.media.cts.DecodeAccuracyTest#testGLViewLargerHeightDecodeAccuracy',
-                '--exclude-filter',
-                'CtsMediaTestCases android.media.cts.DecodeAccuracyTest#testGLViewLargerWidthDecodeAccuracy',
-                '--exclude-filter',
-                'CtsMediaTestCases android.media.cts.MediaExtractorTest#testProgramStreamExtraction',
-                '--exclude-filter',
-                'CtsMediaTestCases[instant] android.media.cts.MediaExtractorTest#testProgramStreamExtraction',
         ],
         'CtsPermissionTestCases.camera': [
                 '--include-filter',
