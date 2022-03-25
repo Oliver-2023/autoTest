@@ -1,4 +1,7 @@
 performance_cuj
+performance_cuj_benchmarks
+performance_cuj_experimental
+performance_cuj_quick
 stub_Pass
 tast
 firmware_FAFTRPC.all
