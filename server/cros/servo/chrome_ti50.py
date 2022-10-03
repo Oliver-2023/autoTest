@@ -19,17 +19,6 @@ class ChromeTi50(chrome_cr50.ChromeCr50):
     START_STR = ['ti50_common']
     NAME = 'ti50'
 
-    # List of all ti50 ccd capabilities. Same order of 'ccd' output.
-    # This is not the same as cr50 list.
-    CAP_NAMES = [
-            'UartGscRxAPTx', 'UartGscTxAPRx', 'UartGscRxECTx', 'UartGscTxECRx',
-            'UartGscRxFpmcuTx', 'UartGscTxFpmcuRx', 'FlashAP', 'FlashEC',
-            'OverrideWP', 'RebootECAP', 'GscFullConsole', 'UnlockNoReboot',
-            'UnlockNoShortPP', 'OpenNoTPMWipe', 'OpenNoLongPP',
-            'BatteryBypassPP', 'I2C', 'FlashRead', 'OpenNoDevMode',
-            'OpenFromUSB', 'OverrideBatt'
-    ]
-
     # Ti50 interrupt numbers reported in taskinfo
     IRQ_DICT = {
         0 : 'UART0_GRP0',
