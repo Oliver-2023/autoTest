@@ -257,7 +257,8 @@ CONFIG['PUBLIC_PRECONDITION'] = {
         'CtsSecurityHostTestCases':
         [_SECURITY_PARANOID_COMMAND, _CONFIG_MODULE_COMMAND],
         'CtsUsageStatsTestCases': _WIFI_CONNECT_COMMANDS_V2,
-        'CtsNetTestCases': _WIFI_CONNECT_COMMANDS_V2 + [_START_MDNS_COMMAND],
+        # Speculatively reverting back to the old method: b/252212907
+        'CtsNetTestCases': _WIFI_CONNECT_COMMANDS + [_START_MDNS_COMMAND],
         # Fall back to old method for fully hiding Ethernet: b/249027146#comment5
         'CtsLibcoreTestCases': _WIFI_CONNECT_COMMANDS,
 }
