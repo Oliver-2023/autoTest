@@ -43,4 +43,5 @@
   <Entry include="CtsSecurityHostTestCases android.security.cts.KernelConfigTest#testConfigHardwareMitigations" />
   <Entry include="CtsSkQPTestCases org.skia.skqp.SkQPRunner#gles_imageblurclampmode" />
   <Entry include="CtsUsageStatsTestCases android.app.usage.cts.UsageStatsTest#testAppLaunchCount" />
+  <Entry include="CtsWifiTestCases android.net.wifi.cts.NsdManagerTest#testNDSManager" />
 </SubPlan>
