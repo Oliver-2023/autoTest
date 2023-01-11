@@ -1400,7 +1400,10 @@ class TradefedTest(test.test):
         raise NotImplementedError('Subclass should override this function')
 
     def _tradefed_env(self):
-        return None
+        env = os.environ.copy()
+        # See b/262183144. CTS implicity assumes how shell expands "*.jar".
+        env['LC_COLLATE'] = 'en_US.UTF-8'
+        return env
 
     def _run_tradefed_with_timeout(self, command, timeout):
         tradefed = self._tradefed_cmd_path()
