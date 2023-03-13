@@ -31,19 +31,25 @@ class firmware_Cr50DeepSleepStress(FirmwareTest):
     MIN_SUSPEND = 15
     # Initialize the FWMP with a non-zero value. Use 100, because it's an
     # unused flag and it wont do anything like lock out dev mode or ccd.
-    FWMP_FLAGS = '0x100'
+    DEFAULT_FWMP_FLAGS = '0x100'
     # The deep sleep count may not exactly match the suspend count. This is the
     # ratio of difference the test tolerates. If the difference/total suspend
     # count is greater than this ratio, fail the test.
     TOLERATED_ERROR = 0.05
 
-    def initialize(self, host, cmdline_args, suspend_count, reset_type):
+    def initialize(self,
+                   host,
+                   cmdline_args,
+                   suspend_count,
+                   reset_type,
+                   fwmp=None):
         """Make sure the test is running with access to the GSC console"""
         self.host = host
         super(firmware_Cr50DeepSleepStress, self).initialize(host, cmdline_args)
         if not hasattr(self, 'gsc'):
             raise error.TestNAError('Test can only be run on devices with '
                                     'access to the GSC console')
+        self.fwmp = fwmp or self.DEFAULT_FWMP_FLAGS
 
         if self.servo.main_device_is_ccd():
             raise error.TestNAError('deep sleep tests can only be run with a '
@@ -66,6 +72,7 @@ class firmware_Cr50DeepSleepStress(FirmwareTest):
     def cleanup(self):
         """Clear the fwmp."""
         try:
+            self._try_to_bring_dut_up()
             self.clear_fwmp()
         finally:
             super(firmware_Cr50DeepSleepStress, self).cleanup()
@@ -73,15 +80,17 @@ class firmware_Cr50DeepSleepStress(FirmwareTest):
 
     def create_fwmp(self):
         """Create the FWMP."""
+        self.fast_ccd_open(True)
+        self.gsc.send_command('ccd lock')
         self.clear_fwmp()
 
         # Clear the TPM owner, so we can set the fwmp.
         tpm_utils.ClearTPMOwnerRequest(self.host, wait_for_ready=True)
-
-        logging.info('Setting FWMP flags to %s', self.FWMP_FLAGS)
+        logging.info('Setting FWMP flags to %s', self.fwmp)
         autotest.Autotest(self.host).run_test('firmware_SetFWMP',
-                flags=self.FWMP_FLAGS, fwmp_cleared=True,
-                check_client_result=True)
+                                              flags=self.fwmp,
+                                              fwmp_cleared=True,
+                                              check_client_result=True)
 
         if self.fwmp_is_cleared():
             raise error.TestError('Unable to create the FWMP')
