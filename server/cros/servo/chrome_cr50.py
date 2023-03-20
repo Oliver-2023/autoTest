@@ -1490,3 +1490,19 @@ class ChromeCr50(chrome_ec.ChromeConsole):
                 v = v == 'yes'
             info[k] = v
         return info
+
+    def ccd_reset_and_wipe_tpm(self):
+        """Open CCD to wipe the tpm."""
+        if not self.testlab_is_on():
+            return
+        self.send_command('ccd testlab open')
+        self.send_command('ccd reset factory')
+        time.sleep(self.CCD_PASSWORD_RATE_LIMIT)
+        self.send_command('ccd set OpenNoTPMWipe IfOpened')
+        time.sleep(self.CCD_PASSWORD_RATE_LIMIT)
+        self.send_command('ccd lock')
+        time.sleep(self.CCD_PASSWORD_RATE_LIMIT)
+        self.send_command('ccd open')
+        time.sleep(self.CCD_PASSWORD_RATE_LIMIT)
+        self.ccd_reset()
+        self.reboot()
