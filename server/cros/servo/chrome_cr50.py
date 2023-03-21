@@ -192,6 +192,8 @@ class ChromeCr50(chrome_ec.ChromeConsole):
     # Cr50 should wake up twice per second while in regular sleep
     SLEEP_RATE = 2
     DS_RESETS_TIMER = True
+    # Maximum TPM init time.
+    TPM_INIT_MAX = 120000
 
     def __init__(self, servo, faft_config):
         """Initializes a ChromeCr50 object.
