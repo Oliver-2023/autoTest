@@ -232,7 +232,10 @@ class FirmwareTest(test.test):
             else:
                 logging.warning('Unsupported gsc %r', gsc_version)
             if gsc:
+                # Support self.cr50 and self.gsc names to help with resolve
+                # merge conflicts with tot.
                 self.cr50 = gsc
+                self.gsc = gsc
         except servo.ControlUnavailableError:
             logging.warning('gsc console not supported.')
         except Exception as e:
