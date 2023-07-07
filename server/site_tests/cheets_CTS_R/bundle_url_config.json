@@ -3,6 +3,6 @@
     "internal_base": "gs://chromeos-arc-images/cts/bundle/R/",
     "partner_base": "gs://chromeos-partner-gts/R/",
     "official_url_pattern": "android-cts-11_r12-linux_x86-%s.zip",
-    "preview_url_pattern": "android-cts-10119548-linux_x86-%s.zip",
+    "preview_url_pattern": "android-cts-10491366-linux_x86-%s.zip",
     "abi_list": ["arm", "x86"]
 }
