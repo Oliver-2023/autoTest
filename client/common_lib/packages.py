@@ -181,7 +181,7 @@ class HttpFetcher(RepositoryFetcher):
 
         try:
             # build up a curl command
-            http_cmd = self.curl_cmd_pattern % (self.url, dest_file_path)
+            http_cmd = self.format_cmd(self.url, dest_file_path)
             try:
                 self.run_command(http_cmd, _run_command_dargs={'timeout': 30})
             except Exception as e:
@@ -201,7 +201,7 @@ class HttpFetcher(RepositoryFetcher):
         # try to retrieve the package via http
         package_url = os.path.join(self.url, filename)
         try:
-            cmd = self.curl_cmd_pattern % (package_url, dest_path)
+            cmd = self.format_cmd(package_url, dest_path)
             result = self.run_command(cmd,
                                       _run_command_dargs={'timeout': 1200})
 
@@ -218,6 +218,15 @@ class HttpFetcher(RepositoryFetcher):
             raise error.PackageFetchError('%s not found in %s\n%s'
                     'curl error code: %d' % (filename, package_url,
                     e.result_obj.stderr, e.result_obj.exit_status))
+
+    @classmethod
+    def format_cmd(cls, url, dest_path):
+        """Format the command to fetch the package."""
+        cmd = cls.curl_cmd_pattern % (url, dest_path)
+        headers = '-H X-SWARMING-TASK-ID:%s -H X-BBID:%s' % (
+                os.environ.get('SWARMING_TASK_ID', 'none'),
+                os.environ.get('BUILD_BUCKET_ID', 'none'))
+        return '%s %s' % (cmd, headers)
 
 
 class LocalFilesystemFetcher(RepositoryFetcher):
