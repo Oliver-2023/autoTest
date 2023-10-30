@@ -685,17 +685,21 @@ def chromite_deploy_chrome(host, gs_path, archive_type, **kwargs):
         raise Exception(
                 'chromite is not packaged in the lacros_gcs_path archive')
 
+    vpython_spec = os.path.join(chrome_dir, '.vpython3')
+    deploy_chrome_bin = os.path.join(chromite_dir, 'bin', 'deploy_chrome')
     if archive_type == 'chrome':
         board = _remove_prefix(host.get_board(), 'board:')
         cmd = [
-                'deploy_chrome', '--force', '--build-dir',
+                'vpython3', '-vpython-spec', vpython_spec, deploy_chrome_bin,
+                '--force', '--build-dir',
                 os.path.join(chrome_dir, 'out/Release/'), '--process-timeout',
                 '180', '--device', host.host_port, '--board', board, '--mount',
                 '--nostrip'
         ]
     elif archive_type == 'lacros':
         cmd = [
-                'deploy_chrome', '--build-dir',
+                'vpython3', '-vpython-spec', vpython_spec, deploy_chrome_bin,
+                '--build-dir',
                 os.path.join(chrome_dir, 'out/Release/'), '--device',
                 host.host_port, '--lacros', '--nostrip', '--force',
                 '--skip-modifying-config-file'
@@ -710,7 +714,7 @@ def chromite_deploy_chrome(host, gs_path, archive_type, **kwargs):
                          stdout_level=logging.INFO,
                          stderr_level=logging.DEBUG,
                          timeout=1200,
-                         extra_paths=[os.path.join(chromite_dir, 'bin')])
+                         extra_paths=['/opt/infra-tools'])
     except error.CmdError as e:
         logging.debug('Error occurred executing chromite.deploy_chrome')
         raise e
