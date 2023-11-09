@@ -46,7 +46,7 @@ _CONTROLFILE_TEMPLATE = Template(
     from autotest_lib.server import utils as server_utils
     {%- endif %}
     {%- if wifi_info_needed %}
-    from autotest_lib.client.common_lib import utils, global_config
+    from autotest_lib.server.cros.tradefed import wifi_utils
     {%- endif %}
     {%- if has_precondition_escape %}
     import pipes
@@ -98,11 +98,7 @@ _CONTROLFILE_TEMPLATE = Template(
         host_list = [hosts.create_host(machine)]
         {%- endif %}
         {%- if wifi_info_needed %}
-        ssid = utils.get_wireless_ssid(machine['hostname'])
-        if machine['hostname'].startswith('chromeos8'):
-            ssid = 'wl-ChromeOS_lab_AP'
-        wifipass = global_config.global_config.get_config_value('CLIENT',
-                    'wireless_password', default=None)
+        ssid, wifipass = wifi_utils.get_wifi_ssid_pass(machine['hostname'])
         {%- endif %}
     {%- endif %}
         job.run_test(
